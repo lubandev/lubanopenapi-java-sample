@@ -6,8 +6,6 @@ import org.springframework.web.client.RestTemplate;
 
 /**
  * spring restTemplete 实例
- * @author 王成成
- * @date 2019年1月14日 下午5:19:06
  */
 @Configuration
 public class RestClientConfig {
