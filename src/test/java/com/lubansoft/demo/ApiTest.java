@@ -99,7 +99,7 @@ public class ApiTest {
         params.put("type", 0);
         List<String> deptIds = new ArrayList<String>();
         deptIds.add(deptId);
-        params.put("deptIds", Collections.singletonList(deptId));
+        params.put("deptIds", deptIds);
         
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(params,headers);
         
