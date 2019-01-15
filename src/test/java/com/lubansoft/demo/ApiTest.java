@@ -1,32 +1,23 @@
 package com.lubansoft.demo;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.web.client.RestTemplate;
 
-import com.lubansoft.demo.interceptor.RestApiRequestInterceptor;
+import com.lubansoft.demo.interceptor.RestApiRequestOkHttpInterceptor;
 import com.lubansoft.demo.util.EmptyUtils;
 import com.lubansoft.demo.util.LBPropertyFile;
 
 
 
-@RunWith(SpringJUnit4ClassRunner.class)//改变junit的运行Runner，使用spring提供的
-@ContextConfiguration("classpath:applicationContext.xml")//指定spring的配置文件
 public class ApiTest {
-	
-	@Autowired
-    private RestTemplate restTemplate;
 	
 	//服务器基础地址
 	private static String BASE_SERVER_URL;
@@ -37,8 +28,15 @@ public class ApiTest {
 	//apisecret
 	private static String API_SECRET;
 	
+	//网络框架方便rest接口调用
+	private static OkHttpClient client;
+	
+	//设置contentType为application/json
+	private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
+	
 	
 	static {
+		//读取配置参数初始化
 		try {
 			LBPropertyFile instance = LBPropertyFile.getInstance();
 			String serverBaseUrl = instance.getProperty("config.properties", "server.baseurl");
@@ -50,6 +48,7 @@ public class ApiTest {
 			BASE_SERVER_URL = instance.appendSlash(serverBaseUrl) + "rs";
 			API_KEY = apikey;
 			API_SECRET = apisecret;
+			client = new OkHttpClient();
 		} catch (Exception e) {
 			throw new RuntimeException("读取配置文件config.properties失败！",e);  
 		}
@@ -62,49 +61,52 @@ public class ApiTest {
 	@Before
 	public void getToken() throws Exception {
 		//1.获取token
-    	String url = BASE_SERVER_URL + "/token/getToken/{apikey}/{apisecret}";
-        Map<String, Object> params = new HashMap<>();
-        params.put("apikey", API_KEY);
-        params.put("apisecret", API_SECRET);
-        String token = restTemplate.getForObject(url, String.class, params);
-        //2.将token加入到请求头
-        if(!EmptyUtils.isBlank(token)){
-			restTemplate.getInterceptors().add(new RestApiRequestInterceptor(token));//添加token
-		}
+    	String url = BASE_SERVER_URL + "/token/getToken/"+API_KEY+"/"+API_SECRET;
+    	Request request = new Request.Builder()
+        					.url(url)
+        					.build();
+    	Response response = client.newCall(request).execute();
+    	if(response.isSuccessful()){
+    		String token = response.body().string();
+    		//2.通过拦截器将token加入到请求头
+            if(!EmptyUtils.isBlank(token)){
+            	client = client.newBuilder().addInterceptor(new RestApiRequestOkHttpInterceptor(token)).build();
+    		}
+    	}
+        
     }
 	
 	/**
 	 * 获取组织项目部信息
 	 */
     @Test
-    public void getOrgDeptInfos() {
+    public void getOrgDeptInfos() throws IOException {
     	String url = BASE_SERVER_URL + "/orgProjService/getOrgDeptList";
-    	String jsonString = restTemplate.getForObject(url, String.class);
-    	System.out.println("组织项目部信息:" + jsonString);
+    	Request request = new Request.Builder()
+							.url(url)
+							.build();
+    	Response response = client.newCall(request).execute();
+    	if(response.isSuccessful()){
+    		System.out.println("组织项目部信息:" + response.body().string());
+    	}
     }
     
 	/**
 	 * 获取项目部下工程信息
 	 */
     @Test
-    public void getProjListByDept() {
+    public void getProjListByDept() throws IOException {
     	String url = BASE_SERVER_URL + "/orgProjService/getProjListByDept";
-    	
-    	HttpHeaders headers = new HttpHeaders();
-    	headers.add(HttpHeaders.CONTENT_TYPE, "application/json");
-        Map<String, Object> params = new HashMap<String, Object>();
-        
-        String deptId = "a1d1b0d12f8f4e748d6e646d223947c8";
-        params.put("type", 0);
-        List<String> deptIds = new ArrayList<String>();
-        deptIds.add(deptId);
-        params.put("deptIds", deptIds);
-        
-        HttpEntity<Map<String, Object>> request = new HttpEntity<>(params,headers);
-        
-        String jsonString = restTemplate.postForObject(url, request, String.class);
-        
-        System.out.println("项目部ID【"+deptId+"】下工程信息:" + jsonString);
+    	String jsonParam = "{\"type\":0,\"deptIds\":[\"a1d1b0d12f8f4e748d6e646d223947c8\"]}";
+    	RequestBody body = RequestBody.create(JSON, jsonParam);
+    	Request request = new Request.Builder()
+    	      .url(url)
+    	      .post(body)
+    	      .build();
+    	Response response = client.newCall(request).execute();
+    	if(response.isSuccessful()){
+    		System.out.println("组织项目部信息:" + response.body().string());
+    	}
     }
     
 }

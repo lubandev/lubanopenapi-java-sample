@@ -1,4 +1,4 @@
-package com.lubansoft.demo.interceptor;
+package com.lubansoft.demo.spring.interceptor;
 
 import java.io.IOException;
 
@@ -8,15 +8,15 @@ import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 
-public class RestApiRequestInterceptor implements ClientHttpRequestInterceptor {
+public class RestApiRequestSpringRestTemplInterceptor implements ClientHttpRequestInterceptor {
 	
 	private String token;
 	
-    public RestApiRequestInterceptor() {
+    public RestApiRequestSpringRestTemplInterceptor() {
 		super();
 	}
     
-	public RestApiRequestInterceptor(String token) {
+	public RestApiRequestSpringRestTemplInterceptor(String token) {
 		super();
 		this.token = token;
 	}

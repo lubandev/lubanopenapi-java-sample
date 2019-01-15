@@ -1,4 +1,4 @@
-package com.lubansoft.demo.util;
+package com.lubansoft.demo.spring.util;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
