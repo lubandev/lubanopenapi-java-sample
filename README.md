@@ -15,7 +15,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- junit版本号 -->  
-        <junit.version>4.12</junit.version>  
+        	<junit.version>4.12</junit.version>  
 	</properties>
 
 	<dependencies>
