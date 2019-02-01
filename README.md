@@ -1,15 +1,16 @@
-功能介绍
-========
-本示例介绍使用Java调用鲁班开放平台接口,提供两种方式：<br>
-1、Junit结合轻量级网络请求框架OkHttp调用<br>
-2、Junit结合Spring-test、Spring RestTemplete调用(适合熟悉spring框架的开发人员)<br>
-运行必须的组件
-========
-* Maven
-* JDK7<br>
+# 功能介绍
 
-Maven依赖（第一种非spring方式）
-========
+本示例介绍使用Java调用鲁班开放平台接口,提供两种方式：
+1、Junit结合轻量级网络请求框架OkHttp调用
+2、Junit结合Spring-test、Spring RestTemplete调用(适合熟悉spring框架的开发人员)
+
+# 运行必须的组件
+
+* Maven
+* JDK7
+
+# Maven依赖（第一种非spring方式）
+
 ```xml
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -37,8 +38,7 @@ Maven依赖（第一种非spring方式）
 		</dependency>
 	</dependencies>
 ```
-Maven依赖（第二种结合spring方式）
-========
+# Maven依赖（第二种结合spring方式）
 ```xml
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -95,8 +95,8 @@ Maven依赖（第二种结合spring方式）
 		</dependency>
 	</dependencies>
 ```
-如何在本地运行？
-========
+# 如何在本地运行？
+
 使用git下载源代码
 ```bash
 git clone http://192.168.3.134/wcc/OpenPlantformApiDemo.git
