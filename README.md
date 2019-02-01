@@ -99,7 +99,7 @@
 
 使用git下载源代码
 ```bash
-git clone http://192.168.3.134/wcc/OpenPlantformApiDemo.git
+git clone https://github.com/lubandev/lubanopenapi-java-sample.git
 ```
 修改config.properties
 ```
