@@ -1,7 +1,7 @@
 # 功能介绍
 
-本示例介绍使用Java调用鲁班开放平台接口,提供两种方式：
-1、Junit结合轻量级网络请求框架OkHttp调用
+本示例介绍使用Java调用鲁班开放平台接口,提供两种方式：<br>
+1、Junit结合轻量级网络请求框架OkHttp调用<br>
 2、Junit结合Spring-test、Spring RestTemplete调用(适合熟悉spring框架的开发人员)
 
 # 运行必须的组件
